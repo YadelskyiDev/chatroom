@@ -8,7 +8,6 @@ export class Application extends Component{
                 <p>Test</p>
                 <Authorization/>
             </div>
-            
         )
     }
 }
