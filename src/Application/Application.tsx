@@ -1,12 +1,38 @@
 import React, { Component } from 'react'
 import { Authorization } from '../Components/Authorization'
+import { Chatroom } from '../Components/Chatroom'
 
-export class Application extends Component{
+interface IState {
+    isLogin: boolean;
+
+}
+
+export class Application extends Component<{}, IState>{
+
+    state = {
+        isLogin: false,
+    }
+
+    setLogin = () => {
+        this.setState({isLogin: true})
+    }
+
+    componentDidMount(){
+        this.setState({isLogin: !!localStorage.getItem('email')})
+        document.addEventListener('setEmail', this.setLogin)
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('setEmail', this.setLogin)
+    }
+    
     render(){
         return(
             <div>
-                <p>Test</p>
-                <Authorization/>
+                <p>Application</p>
+                {this.state.isLogin ? 
+                    <Chatroom/> :
+                    <Authorization />}
             </div>
         )
     }

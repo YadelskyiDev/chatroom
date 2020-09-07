@@ -13,6 +13,11 @@ export class Authorization extends Component<{}, IState> {
         password: '',
     }
 
+    setEmail = () => {
+        localStorage.setItem('email', this.state.email)
+        document.dispatchEvent(new Event('setEmail'))
+    }
+
     sendData = (event: React.MouseEvent<HTMLFormElement>)  => {
         event.preventDefault()
 
@@ -21,7 +26,7 @@ export class Authorization extends Component<{}, IState> {
             body: JSON.stringify({ returnSecureToken: true, ...this.state}),
         }).then( (response: any) =>{
             if (response.ok) {
-                this.setState(response)
+                this.setEmail()
             }
             else {
                 fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDNhISjEoQL3YrTn1ubR4iMrMo2UojuyeE', {
@@ -29,7 +34,7 @@ export class Authorization extends Component<{}, IState> {
                     body: JSON.stringify({ returnSecureToken: true, ...this.state }),
                 }).then((response: any) =>{
                     if(response.ok){
-                        this.setState(response)
+                        this.setEmail()
                     }
                 }
             )}
@@ -46,7 +51,6 @@ export class Authorization extends Component<{}, IState> {
 
 
     render(){
-        console.log(this.state)
         return (
             <form onSubmit={this.sendData}>
                 <input type='email' value={this.state.email} onChange={this.inputEmailHandler} required/>
