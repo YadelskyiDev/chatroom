@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Authorization } from '../Components/Authorization'
 import { Chatroom } from '../Components/Chatroom'
 
+
 interface IState {
     isLogin: boolean;
 
@@ -31,7 +32,7 @@ export class Application extends Component<{}, IState>{
             <div>
                 <p>Application</p>
                 {this.state.isLogin ? 
-                    <Chatroom/> :
+                    <Chatroom /> :
                     <Authorization />}
             </div>
         )

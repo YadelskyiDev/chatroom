@@ -49,12 +49,11 @@ export class Authorization extends Component<{}, IState> {
         this.setState({ password: e.target.value })
     }
 
-
     render(){
         return (
             <form onSubmit={this.sendData}>
-                <input type='email' value={this.state.email} onChange={this.inputEmailHandler} required/>
-                <input type='password' onChange={this.inputPasswordHandler} value={this.state.password} required/>
+                <input type='email' value={this.state.email} onChange={this.inputEmailHandler} defaultValue="test123@gmail.com" required/>
+                <input type='password' onChange={this.inputPasswordHandler} value={this.state.password} defaultValue="test123" required/>
                 <Button type='submit'>Submit</Button>
             </form>
         )
