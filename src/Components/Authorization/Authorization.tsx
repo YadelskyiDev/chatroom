@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
+import * as firebase from 'firebase/app'
 import { Button } from '../Button'
+
 
 interface IState {
     email: string;
@@ -17,28 +19,24 @@ export class Authorization extends Component<{}, IState> {
         localStorage.setItem('email', this.state.email)
         document.dispatchEvent(new Event('setEmail'))
     }
-
-    sendData = (event: React.MouseEvent<HTMLFormElement>)  => {
-        event.preventDefault()
-
-       fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDNhISjEoQL3YrTn1ubR4iMrMo2UojuyeE', {
-            method: 'POST',
-            body: JSON.stringify({ returnSecureToken: true, ...this.state}),
-        }).then( (response: any) =>{
-            if (response.ok) {
-                this.setEmail()
-            }
-            else {
-                fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDNhISjEoQL3YrTn1ubR4iMrMo2UojuyeE', {
-                    method: 'POST',
-                    body: JSON.stringify({ returnSecureToken: true, ...this.state }),
-                }).then((response: any) =>{
-                    if(response.ok){
-                        this.setEmail()
-                    }
-                }
-            )}
+    
+    registerHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        const { email, password } = this.state
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((response: any) => {
+            console.log(response)
+            this.setEmail()
         })
+    }
+
+    loginHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        const { email, password } = this.state
+        firebase.auth().signInWithEmailAndPassword(email, password)
+        .then((response: any) => {
+            this.setEmail()
+         })
     }
 
     inputEmailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,11 +49,12 @@ export class Authorization extends Component<{}, IState> {
 
     render(){
         return (
-            <form onSubmit={this.sendData}>
-                <input type='email' value={this.state.email} onChange={this.inputEmailHandler} defaultValue="test123@gmail.com" required/>
-                <input type='password' onChange={this.inputPasswordHandler} value={this.state.password} defaultValue="test123" required/>
-                <Button type='submit'>Submit</Button>
-            </form>
+            <div>
+                <input type='email' value={this.state.email} onChange={this.inputEmailHandler}  required/>
+                <input type='password' onChange={this.inputPasswordHandler} value={this.state.password} required/>
+                <Button onClick={this.loginHandler}>Login</Button>
+                <Button onClick={this.registerHandler}>Register</Button>
+            </div>
         )
     }
 }

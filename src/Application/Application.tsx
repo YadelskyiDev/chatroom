@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { Authorization } from '../Components/Authorization'
 import { Chatroom } from '../Components/Chatroom'
+import {firebaseInit} from './firebase' 
 
 
 interface IState {
     isLogin: boolean;
 
 }
-
+@firebaseInit
 export class Application extends Component<{}, IState>{
 
     state = {
